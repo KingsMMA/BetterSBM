@@ -21,6 +21,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Disable copy to BD
+      uses: jacobtomlinson/gha-find-replace@v3
+      with:
+        find: "copyToBD: true"
+        replace: "copyToBD: false"
+        regex: false
+        include: ".zplrc.js"
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:

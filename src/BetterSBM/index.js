@@ -12,7 +12,7 @@ module.exports = (Plugin, Library) => {
     return class extends Plugin {
 
         onStart() {
-            if (window.bsbmCache === undefined) window.bsbmCache = {
+            if (window.sbmCache === undefined) window.sbmCache = {
                 tickets: {}
             }
 
@@ -31,11 +31,24 @@ module.exports = (Plugin, Library) => {
             if (val.props === null) return;
             if (val.props.embed === null) return;
 
+            let customInfoDiv = null;
+
             let fields = val.props.embed.fields;
             for (const field of fields) {
                 if (field.rawName !== "Transcript:") continue;
                 const transcript = field.rawValue.split("(")[1].split(")")[0];
-                console.log(transcript);
+                customInfoDiv = document.createElement("div");
+
+                if (transcript in window.sbmCache["tickets"]) {
+                    customInfoDiv.innerHTML = window.sbmCache["tickets"][transcript];
+                    ret.props.children.push(BdApi.React.createElement(BdApi.ReactUtils.wrapElement(customInfoDiv)));
+                    break;
+                }
+
+                customInfoDiv.innerHTML = `<div><iframe src="${transcript}" title="Transcript" style="width: 355%; height: 500px; border-radius: 5px;"></iframe></div>`;
+                ret.props.children.push(BdApi.React.createElement(BdApi.ReactUtils.wrapElement(customInfoDiv)));
+
+                window.sbmCache["tickets"][transcript] = customInfoDiv.innerHTML;
             }
         }
 

@@ -37,6 +37,8 @@ module.exports = (Plugin, Library) => {
             for (const field of fields) {
                 if (field.rawName !== "Transcript:") continue;
                 const transcript = field.rawValue.split("(")[1].split(")")[0];
+                if (!transcript.startsWith("https://sbm.gg/transcripts/")) continue;
+
                 customInfoDiv = document.createElement("div");
 
                 if (transcript in window.sbmCache["tickets"]) {

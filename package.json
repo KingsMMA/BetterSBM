@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "zerespluginlibrary": "^2.0.6"
+  },
+  "scripts": {
+	  "build": "zpl build",
+	  "init": "zpl init"
+  }
+}

@@ -9,6 +9,18 @@ module.exports = (Plugin, Library) => {
     const {Patcher, Logger} = Library;
     const RenderFields = BdApi.Webpack.getByPrototypeKeys("renderFields", "getMaxWidth").prototype;
 
+    const Yes = "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\"✅\" src=\"https://discord.com/assets/e2902f38bd5c27bae536.svg\" alt=\"✅\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-name=\":white_check_mark:\"></span>";
+    const No = "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\"❌\" src=\"https://discord.com/assets/d22e8c77c1aa9e5a69a2.svg\" alt=\"❌\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-name=\":x:\"></span>";
+    const FloorIcons = [
+        "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\":bonzo:\" src=\"https://cdn.discordapp.com/emojis/785196577727709234.webp?size=44&amp;quality=lossless\" alt=\":bonzo:\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-id=\"785196577727709234\"></span>",
+        "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\":scarf:\" src=\"https://cdn.discordapp.com/emojis/785196577467269193.webp?size=44&amp;quality=lossless\" alt=\":scarf:\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-id=\"785196577467269193\"></span>",
+        "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\":theprofessor:\" src=\"https://cdn.discordapp.com/emojis/785196577559412737.webp?size=44&amp;quality=lossless\" alt=\":theprofessor:\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-id=\"785196577559412737\"></span>",
+        "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\":thorn:\" src=\"https://cdn.discordapp.com/emojis/785196577777123384.webp?size=44&amp;quality=lossless\" alt=\":thorn:\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-id=\"785196577777123384\"></span>",
+        "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\":livid:\" src=\"https://cdn.discordapp.com/emojis/785196578049753108.webp?size=44&amp;quality=lossless\" alt=\":livid:\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-id=\"785196578049753108\"></span>",
+        "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\":sadan:\" src=\"https://cdn.discordapp.com/emojis/785196577886175242.webp?size=44&amp;quality=lossless\" alt=\":sadan:\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-id=\"785196577886175242\"></span>",
+        "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\":necron:\" src=\"https://cdn.discordapp.com/emojis/785196577802682388.webp?size=44&amp;quality=lossless\" alt=\":necron:\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-id=\"785196577802682388\"></span>"
+    ];
+
     return class extends Plugin {
 
         onStart() {

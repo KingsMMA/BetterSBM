@@ -1,8 +1,8 @@
 /**
- * 
- * @param {import("zerespluginlibrary").Plugin} Plugin 
- * @param {import("zerespluginlibrary").BoundAPI} Library 
- * @returns 
+ *
+ * @param {import("zerespluginlibrary").Plugin} Plugin
+ * @param {import("zerespluginlibrary").BoundAPI} Library
+ * @returns
  */
 module.exports = (Plugin, Library) => {
 
@@ -32,14 +32,22 @@ module.exports = (Plugin, Library) => {
             if (val.props.embed === null) return;
 
             let customInfoDiv = null;
+            let service = "";
 
             let fields = val.props.embed.fields;
             for (const field of fields) {
+
+                if (field.rawName === "Service:") {
+                    service = field.rawValue;
+                    continue;
+                }
+
                 if (field.rawName !== "Transcript:") continue;
                 const transcript = field.rawValue.split("(")[1].split(")")[0];
                 if (!transcript.startsWith("https://sbm.gg/transcripts/")) continue;
 
                 customInfoDiv = document.createElement("div");
+                customInfoDiv.innerHTML = "";
 
                 if (transcript in window.sbmCache["tickets"]) {
                     customInfoDiv.innerHTML = window.sbmCache["tickets"][transcript];
@@ -50,7 +58,22 @@ module.exports = (Plugin, Library) => {
                 customInfoDiv.innerHTML = `<div><iframe src="${transcript}" title="Transcript" style="width: 355%; height: 500px; border-radius: 5px;"></iframe></div>`;
                 ret.props.children.push(BdApi.React.createElement(BdApi.ReactUtils.wrapElement(customInfoDiv)));
 
-                window.sbmCache["tickets"][transcript] = customInfoDiv.innerHTML;
+                fetch(`https://kingrabbit.dev/sbm/api/v1/service?transcript=${transcript.split("/")[4]}&service=${service.toLowerCase()}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (service === "dungeon" || service === "master_mode") {
+
+                        }
+                    })
+                    .catch(error => {
+                        Logger.error(error);
+                        customInfoDiv.innerHTML = customInfoDiv.innerHTML.substring(0, customInfoDiv.innerHTML.length - 10) + "<div style=\"width: 355%\">An error occurred loading the data.  This is most likely due to the API server being down.</div>";
+                    });
+            }
+
+            if (["Dungeon", "Master_mode", "Kuudra", "Slayer"].includes(service)) {
+                if (customInfoDiv.innerHTML === null || customInfoDiv.innerHTML === undefined || customInfoDiv.innerHTML === "") customInfoDiv.innerHTML = "Loading...";
+                else customInfoDiv.innerHTML += "Loading...";
             }
         }
 

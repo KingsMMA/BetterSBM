@@ -84,7 +84,7 @@ module.exports = (Plugin, Library) => {
             }
 
             if (["Dungeon", "Master_mode", "Kuudra", "Slayer"].includes(service)) {
-                if (customInfoDiv.innerHTML === null || customInfoDiv.innerHTML === undefined || customInfoDiv.innerHTML === "") customInfoDiv.innerHTML = "Loading...";
+                if (customInfoDiv.innerHTML === undefined || customInfoDiv.innerHTML === null || customInfoDiv.innerHTML === "") customInfoDiv.innerHTML = "Loading...";
                 else customInfoDiv.innerHTML += "Loading...";
             }
         }

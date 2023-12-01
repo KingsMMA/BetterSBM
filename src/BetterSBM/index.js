@@ -84,7 +84,8 @@ module.exports = (Plugin, Library) => {
             }
 
             if (["Dungeon", "Master_mode", "Kuudra", "Slayer"].includes(service)) {
-                if (customInfoDiv.innerHTML === undefined || customInfoDiv.innerHTML === null || customInfoDiv.innerHTML === "") customInfoDiv.innerHTML = "Loading...";
+                if (customInfoDiv === undefined || customInfoDiv === null) return;  // The error is caused by logs that didn't close the ticket
+                else if (customInfoDiv.innerHTML === undefined || customInfoDiv.innerHTML === null || customInfoDiv.innerHTML === "") customInfoDiv.innerHTML = "Loading...";
                 else customInfoDiv.innerHTML += "Loading...";
             }
         }

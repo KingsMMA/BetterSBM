@@ -47,73 +47,76 @@ module.exports = (Plugin, Library) => {
             let service = "";
 
             let fields = val.props.embed.fields;
-            for (const field of fields) {
+            window.setTimeout(() => {
+                for (const field of fields) {
 
-                if (field.rawName === "Service:") {
-                    service = field.rawValue.toLowerCase();
-                    continue;
+                    if (field.rawName === "Service:") {
+                        service = field.rawValue.toLowerCase();
+                        continue;
+                    }
+
+                    if (field.rawName !== "Transcript:" && field.rawName !== "Direct Transcript") continue;
+                    const transcript = field.rawValue.split("(")[1].split(")")[0];
+                    if (!transcript.startsWith("https://sbm.gg/transcripts/")) continue;
+
+                    customInfoDiv = document.createElement("div");
+                    customInfoDiv.innerHTML = "";
+
+                    document.getElementById("message-accessories-" + ret._owner.stateNode.props.messageId).children[0].appendChild(customInfoDiv);
+
+                    if (transcript in window.sbmCache["tickets"]) {
+                        customInfoDiv.innerHTML = window.sbmCache["tickets"][transcript];
+                        break;
+                    }
+
+                    customInfoDiv.innerHTML = `<div><iframe src="${transcript}" title="Transcript" style="width: 95%; height: 500px; border-radius: 5px;"></iframe></div>`;
+
+                    fetch(`https://kingrabbit.dev/sbm/api/v1/service?transcript=${transcript.split("/")[4]}&service=${service.toLowerCase()}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            let isDungeons = service === "dungeon";
+                            if (isDungeons || service === "master_mode") {
+                                const floors = data["floors"];
+
+                                const convertTime = timeInMs => {
+                                    const minutes = Math.floor(timeInMs / 60000);
+                                    const seconds = ((timeInMs % 60000) / 1000).toFixed(0);
+                                    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+                                }
+
+                                const getDivForSect = (floor) => {
+                                    const floorStr = "" + floor;
+                                    const floorData = floorStr in floors ? floors[floorStr] : {"comps": 0, "pb": -1, "pbS": -1, "pbSP": -1};
+                                    return `<div style="width: ${isDungeons ? 50 : 33}%; float: left;"><br>${FloorIcons[floor - 1]} <b>${isDungeons ? "Floor" : "Master"} ${floor}:</b><br><b>` +
+                                        `    Collection: </b>${floorData["comps"]}<br>` +
+                                        `    ${floorData["pb"] === -1 ? No : Yes} Comp${floorData["pb"] === -1 ? "" : ` <em>(${convertTime(floorData["pb"])})</em>`}<br>` +
+                                        `    ${floorData["pbS"] === -1 ? No : Yes} S${floorData["pbS"] === -1 ? "" : ` <em>(${convertTime(floorData["pbS"])})</em>`}<br>` +
+                                        `    ${floorData["pbSP"] === -1 ? No : Yes} S+${floorData["pbSP"] === -1 ? "" : ` <em>(${convertTime(floorData["pbSP"])})</em>`}<br></div>`;
+                                };
+
+                                let newSrc = customInfoDiv.innerHTML.substring(0, customInfoDiv.innerHTML.length - 43) + "<div class='embedFields__51397' style='display: inline-block; width: 100%; padding: 15px; -webkit-box-sizing: border-box;'>";
+                                for (let i = isDungeons ? 4 : 1; i <= 7; i++) {
+                                    newSrc += getDivForSect(i);
+                                    if (isDungeons && (i === 5)) newSrc += "<br>";
+                                    else if (!isDungeons && (i === 3 || i === 6)) newSrc += "<br>";
+                                }
+
+                                customInfoDiv.innerHTML = newSrc + "</div>";
+                            }
+                        })
+                        .catch(error => {
+                            Logger.error(error);
+                            customInfoDiv.innerHTML = customInfoDiv.innerHTML.substring(0, customInfoDiv.innerHTML.length - 43) + "<div style='padding: 15px'>An error occurred loading the data.  This is most likely due to the API server being down.<br>If this error persists or is inconsistent, please contact 'kingsdev' on discord.</div>";
+                        });
                 }
 
-                if (field.rawName !== "Transcript:") continue;
-                const transcript = field.rawValue.split("(")[1].split(")")[0];
-                if (!transcript.startsWith("https://sbm.gg/transcripts/")) continue;
-
-                customInfoDiv = document.createElement("div");
-                customInfoDiv.innerHTML = "";
-
-                if (transcript in window.sbmCache["tickets"]) {
-                    customInfoDiv.innerHTML = window.sbmCache["tickets"][transcript];
-                    ret.props.children.push(BdApi.React.createElement(BdApi.ReactUtils.wrapElement(customInfoDiv)));
-                    break;
+                if (["dungeon", "master_mode", "kuudra", "slayer"].includes(service)) {
+                    if (customInfoDiv === undefined || customInfoDiv === null) return;  // The error is caused by logs that didn't close the ticket (there isn't a transcript attached)
+                    else if (customInfoDiv.innerHTML === undefined || customInfoDiv.innerHTML === null || customInfoDiv.innerHTML === "") customInfoDiv.innerHTML = "<div style='padding: 15px'>Loading...</div>";
+                    else customInfoDiv.innerHTML += "<div style='padding: 15px'>Loading...</div>";
                 }
 
-                customInfoDiv.innerHTML = `<div><iframe src="${transcript}" title="Transcript" style="width: 355%; height: 500px; border-radius: 5px;"></iframe></div>`;
-                ret.props.children.push(BdApi.React.createElement(BdApi.ReactUtils.wrapElement(customInfoDiv)));
-
-                fetch(`https://kingrabbit.dev/sbm/api/v1/service?transcript=${transcript.split("/")[4]}&service=${service.toLowerCase()}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        let isDungeons = service === "dungeon";
-                        if (isDungeons || service === "master_mode") {
-                            const floors = data["floors"];
-                            console.log(data);
-                            console.log(floors);
-
-                            const convertTime = timeInMs => {
-                                const minutes = Math.floor(timeInMs / 60000);
-                                const seconds = ((timeInMs % 60000) / 1000).toFixed(0);
-                                return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-                            }
-
-                            const getDivForSect = (floor) => {
-                                const floorStr = "" + floor;
-                                const floorData = floors[floorStr];
-                                return `<div style="width: ${isDungeons ? 50 : 33}%; float: left;"><br>${FloorIcons[floor - 1]} <b>${isDungeons ? "Floor" : "Master"} ${floor}:</b><br><b>` +
-                                    `    Collection: </b>${floorData["comps"]}<br>` +
-                                    `    ${floorData["pb"] === -1 ? No : Yes} Comp${floorData["pb"] === -1 ? "" : ` <em>(${convertTime(floorData["pb"])})</em>`}<br>` +
-                                    `    ${floorData["pbS"] === -1 ? No : Yes} S${floorData["pbS"] === -1 ? "" : ` <em>(${convertTime(floorData["pbS"])})</em>`}<br>` +
-                                    `    ${floorData["pbSP"] === -1 ? No : Yes} S+${floorData["pbSP"] === -1 ? "" : ` <em>(${convertTime(floorData["pbSP"])})</em>`}<br></div>`;
-                            };
-
-                            let newSrc = customInfoDiv.innerHTML.substring(0, customInfoDiv.innerHTML.length - 10) + "<div style='width: 355%;'>";
-                            for (let i = isDungeons ? 4 : 1; i <= 7; i++) {
-                                newSrc += getDivForSect(i);
-                            }
-
-                            customInfoDiv.innerHTML = newSrc + "</div>";
-                        }
-                    })
-                    .catch(error => {
-                        Logger.error(error);
-                        customInfoDiv.innerHTML = customInfoDiv.innerHTML.substring(0, customInfoDiv.innerHTML.length - 10) + "<div style=\"width: 355%\">An error occurred loading the data.  This is most likely due to the API server being down.</div>";
-                    });
-            }
-
-            if (["dungeon", "master_mode", "kuudra", "slayer"].includes(service)) {
-                if (customInfoDiv === undefined || customInfoDiv === null) return;  // The error is caused by logs that didn't close the ticket
-                else if (customInfoDiv.innerHTML === undefined || customInfoDiv.innerHTML === null || customInfoDiv.innerHTML === "") customInfoDiv.innerHTML = "Loading...";
-                else customInfoDiv.innerHTML += "Loading...";
-            }
+            }, 100);
         }
 
     };

@@ -77,6 +77,11 @@ module.exports = (Plugin, Library) => {
                     fetch(`https://kingrabbit.dev/sbm/api/v1/service?transcript=${transcript.split("/")[4]}&service=${service.toLowerCase()}`)
                         .then(response => response.json())
                         .then(data => {
+                            if (data["success"] === false) {
+                                customInfoDiv.innerHTML = customInfoDiv.innerHTML.substring(0, customInfoDiv.innerHTML.length - 43) + `<div style='padding: 15px'>An error occurred loading the data: ${data["error"]}</div>`;
+                                return;
+                            }
+
                             let isDungeons = service === "dungeon";
                             if (isDungeons || service === "master_mode") {
                                 const floors = data["floors"];

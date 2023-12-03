@@ -62,7 +62,8 @@ module.exports = (Plugin, Library) => {
                     customInfoDiv = document.createElement("div");
                     customInfoDiv.innerHTML = "";
 
-                    document.getElementById("message-accessories-" + ret._owner.stateNode.props.messageId).children[0].appendChild(customInfoDiv);
+                    let embed = document.getElementById("message-accessories-" + ret._owner.stateNode.props.messageId).children[0];
+                    embed.appendChild(customInfoDiv);
 
                     if (transcript in window.sbmCache["tickets"]) {
                         customInfoDiv.innerHTML = window.sbmCache["tickets"][transcript];
@@ -87,14 +88,14 @@ module.exports = (Plugin, Library) => {
                                 const getDivForSect = (floor) => {
                                     const floorStr = "" + floor;
                                     const floorData = floorStr in floors ? floors[floorStr] : {"comps": 0, "pb": -1, "pbS": -1, "pbSP": -1};
-                                    return `<div style="width: ${isDungeons ? 50 : 33}%; float: left;"><br>${FloorIcons[floor - 1]} <b>${isDungeons ? "Floor" : "Master"} ${floor}:</b><br><b>` +
+                                    return `<div style="width: ${isDungeons ? 50 : 33}%; float: left;">${floor <= 3 || (floor <= 5 && isDungeons) ? "" : "<br>"}${FloorIcons[floor - 1]} <b>${isDungeons ? "Floor" : "Master"} ${floor}:</b><br><b>` +
                                         `    Collection: </b>${floorData["comps"]}<br>` +
                                         `    ${floorData["pb"] === -1 ? No : Yes} Comp${floorData["pb"] === -1 ? "" : ` <em>(${convertTime(floorData["pb"])})</em>`}<br>` +
                                         `    ${floorData["pbS"] === -1 ? No : Yes} S${floorData["pbS"] === -1 ? "" : ` <em>(${convertTime(floorData["pbS"])})</em>`}<br>` +
                                         `    ${floorData["pbSP"] === -1 ? No : Yes} S+${floorData["pbSP"] === -1 ? "" : ` <em>(${convertTime(floorData["pbSP"])})</em>`}<br></div>`;
                                 };
 
-                                let newSrc = customInfoDiv.innerHTML.substring(0, customInfoDiv.innerHTML.length - 43) + "<div class='embedFields__51397' style='display: inline-block; width: 100%; padding: 15px; -webkit-box-sizing: border-box;'>";
+                                let newSrc = customInfoDiv.innerHTML.substring(0, customInfoDiv.innerHTML.length - 43) + "<div class='embedFields__51397' style='display: inline-block; width: 100%; padding: 8px 15px 15px 15px; -webkit-box-sizing: border-box;'>";
                                 for (let i = isDungeons ? 4 : 1; i <= 7; i++) {
                                     newSrc += getDivForSect(i);
                                     if (isDungeons && (i === 5)) newSrc += "<br>";

@@ -21,6 +21,18 @@ module.exports = (Plugin, Library) => {
         "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\":necron:\" src=\"https://cdn.discordapp.com/emojis/785196577802682388.webp?size=44&amp;quality=lossless\" alt=\":necron:\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-id=\"785196577802682388\"></span>"
     ];
 
+    const getKuudraIcon = (tier, image) => {
+        return `<span class="emojiContainer__4a804 emojiContainerClickable__55a4f" aria-expanded="false" role="button" tabindex="0"><img aria-label=":${tier}:" src="${image}" alt="${tier}" draggable="false" class="emoji" data-type="emoji"></span>`;
+    }
+
+    const KuudraIcons = {
+        basic: getKuudraIcon("basic", "https://wiki.hypixel.net/images/f/f0/SkyBlock_items_kuudra_tier_key.png"),
+        hot: getKuudraIcon("hot", "https://wiki.hypixel.net/images/7/78/SkyBlock_items_kuudra_hot_tier_key.png"),
+        burning: getKuudraIcon("burning", "https://wiki.hypixel.net/images/8/83/SkyBlock_items_kuudra_burning_tier_key.png"),
+        fiery: getKuudraIcon("fiery", "https://wiki.hypixel.net/images/5/51/SkyBlock_items_kuudra_fiery_tier_key.png"),
+        infernal: getKuudraIcon("infernal", "https://wiki.hypixel.net/images/3/3e/SkyBlock_items_kuudra_infernal_tier_key.png")
+    };
+
     return class extends Plugin {
 
         onStart() {
@@ -109,6 +121,14 @@ module.exports = (Plugin, Library) => {
                                     else if (!isDungeons && (i === 3 || i === 6)) newSrc += "<br>";
                                 }
 
+                                customInfoDiv.innerHTML = newSrc + "</div>";
+                            } else if (service === "kuudra") {
+                                const kuudraData = data["tiers"];
+                                let newSrc = customInfoDiv.innerHTML.substring(0, customInfoDiv.innerHTML.length - 43) + "<div class='embedFields__51397' style='display: inline-block; width: 100%; padding: 0px 15px 15px 15px; -webkit-box-sizing: border-box;'>";
+                                for (const tier of ["Basic", "Hot", "Burning", "Fiery", "Infernal"]) {
+                                    let _tier = tier.toLowerCase();
+                                    newSrc += `<br>${KuudraIcons[_tier]} <b>${tier}:</b> ${kuudraData[_tier]}`;
+                                }
                                 customInfoDiv.innerHTML = newSrc + "</div>";
                             }
                         })

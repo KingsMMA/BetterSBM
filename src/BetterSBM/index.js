@@ -50,7 +50,7 @@ module.exports = (Plugin, Library) => {
             for (const field of fields) {
 
                 if (field.rawName === "Service:") {
-                    service = field.rawValue;
+                    service = field.rawValue.toLowerCase();
                     continue;
                 }
 
@@ -73,8 +73,34 @@ module.exports = (Plugin, Library) => {
                 fetch(`https://kingrabbit.dev/sbm/api/v1/service?transcript=${transcript.split("/")[4]}&service=${service.toLowerCase()}`)
                     .then(response => response.json())
                     .then(data => {
-                        if (service === "dungeon" || service === "master_mode") {
+                        let isDungeons = service === "dungeon";
+                        if (isDungeons || service === "master_mode") {
+                            const floors = data["floors"];
+                            console.log(data);
+                            console.log(floors);
 
+                            const convertTime = timeInMs => {
+                                const minutes = Math.floor(timeInMs / 60000);
+                                const seconds = ((timeInMs % 60000) / 1000).toFixed(0);
+                                return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+                            }
+
+                            const getDivForSect = (floor) => {
+                                const floorStr = "" + floor;
+                                const floorData = floors[floorStr];
+                                return `<div style="width: ${isDungeons ? 50 : 33}%; float: left;"><br>${FloorIcons[floor - 1]} <b>${isDungeons ? "Floor" : "Master"} ${floor}:</b><br><b>` +
+                                    `    Collection: </b>${floorData["comps"]}<br>` +
+                                    `    ${floorData["pb"] === -1 ? No : Yes} Comp${floorData["pb"] === -1 ? "" : ` <em>(${convertTime(floorData["pb"])})</em>`}<br>` +
+                                    `    ${floorData["pbS"] === -1 ? No : Yes} S${floorData["pbS"] === -1 ? "" : ` <em>(${convertTime(floorData["pbS"])})</em>`}<br>` +
+                                    `    ${floorData["pbSP"] === -1 ? No : Yes} S+${floorData["pbSP"] === -1 ? "" : ` <em>(${convertTime(floorData["pbSP"])})</em>`}<br></div>`;
+                            };
+
+                            let newSrc = customInfoDiv.innerHTML.substring(0, customInfoDiv.innerHTML.length - 10) + "<div style='width: 355%;'>";
+                            for (let i = isDungeons ? 4 : 1; i <= 7; i++) {
+                                newSrc += getDivForSect(i);
+                            }
+
+                            customInfoDiv.innerHTML = newSrc + "</div>";
                         }
                     })
                     .catch(error => {
@@ -83,7 +109,7 @@ module.exports = (Plugin, Library) => {
                     });
             }
 
-            if (["Dungeon", "Master_mode", "Kuudra", "Slayer"].includes(service)) {
+            if (["dungeon", "master_mode", "kuudra", "slayer"].includes(service)) {
                 if (customInfoDiv === undefined || customInfoDiv === null) return;  // The error is caused by logs that didn't close the ticket
                 else if (customInfoDiv.innerHTML === undefined || customInfoDiv.innerHTML === null || customInfoDiv.innerHTML === "") customInfoDiv.innerHTML = "Loading...";
                 else customInfoDiv.innerHTML += "Loading...";

@@ -72,6 +72,8 @@ module.exports = (Plugin, Library) => {
 
                     customInfoDiv.innerHTML = `<div><iframe src="${transcript}" title="Transcript" style="width: 95%; height: 500px; border-radius: 5px;"></iframe></div>`;
 
+                    if (service === "") continue;
+
                     fetch(`https://kingrabbit.dev/sbm/api/v1/service?transcript=${transcript.split("/")[4]}&service=${service.toLowerCase()}`)
                         .then(response => response.json())
                         .then(data => {

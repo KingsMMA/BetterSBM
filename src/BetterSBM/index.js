@@ -47,6 +47,10 @@ module.exports = (Plugin, Library) => {
                 tickets: {}
             }
 
+            BdApi.DOM.addStyle("BetterSBM", `.content__764ce.content__96073.thin_b1c063.scrollerBase_dc3aa9 {
+                color: white;
+            }`);
+
             window.unpatchTicketViewer = Patcher.after(RenderFields, "renderFields", this.loadEmbed);
 
             const {Webpack: src_Webpack} = BdApi;
@@ -90,6 +94,8 @@ module.exports = (Plugin, Library) => {
                 window.unpatchLogHider();
                 delete window.unpatchLogHider;
             }
+
+            BdApi.DOM.removeStyle("BetterSBM");
 
             Logger.info("Plugin disabled!");
         }

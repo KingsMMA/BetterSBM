@@ -12,6 +12,28 @@
     "patreon": "",
     "donate": "",
     "invite": "",
-    "changelog": [],
+    "changelog": [
+        {
+            "title": "Initial Release",
+            "type": "added",
+            "items": [
+                "Added an in-app transcript viewer",
+                "Added a stats viewer for relevant information regarding logged services",
+                "Added a log hider to better view unreviewed logs"
+            ]
+        },
+        {
+            "title": "Reviewing Logs",
+            "type": "tutorial",
+            "items": [
+                "First, check that the player has all the logged carries on their account.\n    - If they do, react with the :white_check_mark: emoji\n    - If they don't, manually verify this, then react with the :x: emoji.  Make sure to contact the client and carrier to see what happened.",
+                "Next, skim the ticket to check for any strikable offences\n    - If there were any strikable offences (including false logging), react with the :bowling: emoji.  If they weren't already striked for it, do so.",
+                "If relevant, check the times of the logged services to see if they were done in a reasonable amount of time given the floor, score, and relevant mayors\n    - If they weren't, skill check the carrier",
+                "Once you've done all of this, react with the :thumbsup: emoji to mark the ticket as reviewed.  Make sure all action has been taken first, including the verification of carries completed.  That is, don't mark a log as reviewed if the client and carrier still need to be contacted or if you are still determining if a strike should be given.",
+                "If another user has already reacted to a message, please leave it for them to finish.  If they seem to have forgotten, feel free to remind them with a friendly ping in <#1029462829163614310>.",
+                "If you have any questions, feel free to DM <@664018411214340116> (kingsdev) on discord or ask in <#1029462829163614310>."
+            ]
+        }
+    ],
     "defaultConfig": []
 }

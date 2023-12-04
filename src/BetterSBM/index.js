@@ -26,6 +26,12 @@ module.exports = (Plugin, Library) => {
         getIcon("necron", "https://cdn.discordapp.com/emojis/785196577802682388.webp?size=44&amp;quality=lossless")
     ]
 
+    const SlayerIcons = {
+        rev: getIcon("rev", "https://wiki.hypixel.net/images/9/94/SkyBlock_sprite_npcs_revenant_horror.png"),
+        eman: getIcon("eman", "https://wiki.hypixel.net/images/1/14/Minecraft_sprite_entity_enderman.png"),
+        blaze: getIcon("blaze", "https://wiki.hypixel.net/images/2/2a/Minecraft_sprite_entity_blaze.png"),
+    }
+
     const KuudraIcons = {
         basic: getIcon("basic", "https://wiki.hypixel.net/images/f/f0/SkyBlock_items_kuudra_tier_key.png"),
         hot: getIcon("hot", "https://wiki.hypixel.net/images/7/78/SkyBlock_items_kuudra_hot_tier_key.png"),

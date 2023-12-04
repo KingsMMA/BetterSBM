@@ -77,9 +77,10 @@ module.exports = (Plugin, Library) => {
                     }
 
                     if (message.reactions !== undefined && message.reactions.length >= 1) {
-                        const reaction = message.reactions[0];
-                        if ((reaction.count === 1 && (reaction.emoji.name === "✅" || reaction.emoji.name === "❓")) || message.reactions.length === 2) {
-                            message.blocked = true;
+                        for (const reaction of message.reactions) {
+                            if (reaction.emoji.name === "👍") {
+                                message.blocked = true;
+                            }
                         }
                     }
                 });

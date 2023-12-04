@@ -15,14 +15,15 @@ The following is a tutorial on how to review logs.  It can be accessed in-app by
 - If another user has already reacted to a message, please leave it for them to finish.  If they seem to have forgotten, feel free to remind them with a friendly ping in ⁠`💬｜staff-chat`.
 - If you have any questions, feel free to DM `kingsdev` on discord, ask in `⁠💬｜staff-chat`, or create an issue on the repo.
 
-## Run Configurations
+## Building the Plugin
+After cloning the repo, run `npm ci` to install any required node modules.
 A run configuration can be used to automatically build the plugin and load it in BetterDiscord.
+
+### Command Line
+1. Run `npm run build BetterSBM`
 
 ### IntelliJ
 1. Create a new `npm` run configuration
 2. Set the command to `run`
 3. Set the scripts to `build`
 4. Set the arguments to `BetterSBM`
-
-### Command Line
-1. Run `npm run build BetterSBM`

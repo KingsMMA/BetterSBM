@@ -86,7 +86,10 @@ module.exports = (Plugin, Library) => {
 
         onStop() {
             window.unpatchTicketViewer();
-            window.unpatchLogHider();
+            if (window.unpatchLogHider !== undefined) {
+                window.unpatchLogHider();
+                delete window.unpatchLogHider;
+            }
 
             Logger.info("Plugin disabled!");
         }

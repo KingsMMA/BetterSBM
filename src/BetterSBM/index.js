@@ -129,6 +129,14 @@ module.exports = (Plugin, Library) => {
                                 }
 
                                 customInfoDiv.innerHTML = newSrc + "</div>";
+                            } else if (service === "slayer") {
+                                let newSrc = customInfoDiv.innerHTML.substring(0, customInfoDiv.innerHTML.length - 43) + "<div class='embedFields__51397' style='display: inline-block; width: 100%; padding: 0px 15px 15px 15px; -webkit-box-sizing: border-box;'>";
+                                const slayerData = data["bosses"];
+                                const temp = "<div style='width: 33%; float: left;'>";
+                                newSrc += `${temp}<br>${SlayerIcons["blaze"]} <b>Blaze:</b><br>Tier 2: ${slayerData["b2"]}<br>Tier 3: ${slayerData["b3"]}<br>Tier 4: ${slayerData["b4"]}</div>`;
+                                newSrc += `${temp}<br>${SlayerIcons["eman"]} <b>Enderman:</b><br>Tier 3: ${slayerData["e3"]}<br>Tier 4: ${slayerData["e4"]}</div>`;
+                                newSrc += `${temp}<br>${SlayerIcons["rev"]} <b>Revenant:</b><br>Tier 5: ${slayerData["r5"]}</div>`;
+                                customInfoDiv.innerHTML = newSrc + "</div>";
                             } else if (service === "kuudra") {
                                 const kuudraData = data["tiers"];
                                 let newSrc = customInfoDiv.innerHTML.substring(0, customInfoDiv.innerHTML.length - 43) + "<div class='embedFields__51397' style='display: inline-block; width: 100%; padding: 0px 15px 15px 15px; -webkit-box-sizing: border-box;'>";

@@ -56,7 +56,6 @@ module.exports = (Plugin, Library) => {
 
                 window.unpatchLogHider = Patcher.after(reaction.type.prototype, 'render', (thisObject, _, result) => {
                     const {message, emoji, count, type} = thisObject.props;
-                    const renderTooltip = result.props.children[0].props.children;
                     if (message.embeds.length !== 1) return;
                     const embed = message.embeds[0];
                     const title = embed.rawTitle;
@@ -73,7 +72,6 @@ module.exports = (Plugin, Library) => {
                         if (parts.length !== 3 || parts[1] !== "Service" || parts[2] !== "Log") return;
                     }
 
-                    console.log(message);
                     if (message.reactions !== undefined && message.reactions.length >= 1) {
                         const reaction = message.reactions[0];
                         if ((reaction.count === 1 && (reaction.emoji.name === "✅" || reaction.emoji.name === "❓")) || message.reactions.length === 2) {

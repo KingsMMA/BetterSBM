@@ -49,11 +49,46 @@ module.exports = (Plugin, Library) => {
 
             window.unpatchTicketViewer = Patcher.after(RenderFields, "renderFields", this.loadEmbed);
 
+            const {Webpack: src_Webpack} = BdApi;
+            const ConnectedReaction = src_Webpack.getModule(m => m?.type?.toString()?.includes('burstReactionsEnabled'), {searchExports: true});
+            const unpatchConnectedReaction = Patcher.after(ConnectedReaction, 'type', (_, __, reaction) => {
+                unpatchConnectedReaction();
+
+                window.unpatchLogHider = Patcher.after(reaction.type.prototype, 'render', (thisObject, _, result) => {
+                    const {message, emoji, count, type} = thisObject.props;
+                    const renderTooltip = result.props.children[0].props.children;
+                    if (message.embeds.length !== 1) return;
+                    const embed = message.embeds[0];
+                    const title = embed.rawTitle;
+                    if (title === undefined) {
+                        if (
+                            (embed.footer === undefined || embed.footer.text !== "Skyblock Maniacs") ||
+                            (embed.author === undefined) ||
+                            (embed.fields.length !== 4 || embed.fields[0].rawName !== "Ticket Owner" || embed.fields[1].rawName !== "Ticket Name" ||
+                                embed.fields[2].rawName !== "Panel Name" || embed.fields[3].rawName !== "Direct Transcript")
+                        )
+                            return;
+                    } else {
+                        const parts = title.split(" ");
+                        if (parts.length !== 3 || parts[1] !== "Service" || parts[2] !== "Log") return;
+                    }
+
+                    console.log(message);
+                    if (message.reactions !== undefined && message.reactions.length >= 1) {
+                        const reaction = message.reactions[0];
+                        if ((reaction.count === 1 && (reaction.emoji.name === "✅" || reaction.emoji.name === "❓")) || message.reactions.length === 2) {
+                            message.blocked = true;
+                        }
+                    }
+                });
+            });
+
             Logger.info("Plugin enabled!");
         }
 
         onStop() {
             window.unpatchTicketViewer();
+            window.unpatchLogHider();
 
             Logger.info("Plugin disabled!");
         }
@@ -113,7 +148,12 @@ module.exports = (Plugin, Library) => {
 
                                 const getDivForSect = (floor) => {
                                     const floorStr = "" + floor;
-                                    const floorData = floorStr in floors ? floors[floorStr] : {"comps": 0, "pb": -1, "pbS": -1, "pbSP": -1};
+                                    const floorData = floorStr in floors ? floors[floorStr] : {
+                                        "comps": 0,
+                                        "pb": -1,
+                                        "pbS": -1,
+                                        "pbSP": -1
+                                    };
                                     return `<div style="width: ${isDungeons ? 50 : 33}%; float: left;">${floor <= 3 || (floor <= 5 && isDungeons) ? "" : "<br>"}${FloorIcons[floor - 1]} <b>${isDungeons ? "Floor" : "Master"} ${floor}:</b><br><b>` +
                                         `    Collection: </b>${floorData["comps"]}<br>` +
                                         `    ${floorData["pb"] === -1 ? No : Yes} Comp${floorData["pb"] === -1 ? "" : ` <em>(${convertTime(floorData["pb"])})</em>`}<br>` +

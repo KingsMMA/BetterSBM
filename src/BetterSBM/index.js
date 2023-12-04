@@ -11,26 +11,27 @@ module.exports = (Plugin, Library) => {
 
     const Yes = "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\"✅\" src=\"https://discord.com/assets/e2902f38bd5c27bae536.svg\" alt=\"✅\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-name=\":white_check_mark:\"></span>";
     const No = "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\"❌\" src=\"https://discord.com/assets/d22e8c77c1aa9e5a69a2.svg\" alt=\"❌\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-name=\":x:\"></span>";
-    const FloorIcons = [
-        "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\":bonzo:\" src=\"https://cdn.discordapp.com/emojis/785196577727709234.webp?size=44&amp;quality=lossless\" alt=\":bonzo:\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-id=\"785196577727709234\"></span>",
-        "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\":scarf:\" src=\"https://cdn.discordapp.com/emojis/785196577467269193.webp?size=44&amp;quality=lossless\" alt=\":scarf:\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-id=\"785196577467269193\"></span>",
-        "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\":theprofessor:\" src=\"https://cdn.discordapp.com/emojis/785196577559412737.webp?size=44&amp;quality=lossless\" alt=\":theprofessor:\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-id=\"785196577559412737\"></span>",
-        "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\":thorn:\" src=\"https://cdn.discordapp.com/emojis/785196577777123384.webp?size=44&amp;quality=lossless\" alt=\":thorn:\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-id=\"785196577777123384\"></span>",
-        "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\":livid:\" src=\"https://cdn.discordapp.com/emojis/785196578049753108.webp?size=44&amp;quality=lossless\" alt=\":livid:\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-id=\"785196578049753108\"></span>",
-        "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\":sadan:\" src=\"https://cdn.discordapp.com/emojis/785196577886175242.webp?size=44&amp;quality=lossless\" alt=\":sadan:\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-id=\"785196577886175242\"></span>",
-        "<span class=\"emojiContainer__4a804 emojiContainerClickable__55a4f\" aria-expanded=\"false\" role=\"button\" tabindex=\"0\"><img aria-label=\":necron:\" src=\"https://cdn.discordapp.com/emojis/785196577802682388.webp?size=44&amp;quality=lossless\" alt=\":necron:\" draggable=\"false\" class=\"emoji\" data-type=\"emoji\" data-id=\"785196577802682388\"></span>"
-    ];
 
-    const getKuudraIcon = (tier, image) => {
-        return `<span class="emojiContainer__4a804 emojiContainerClickable__55a4f" aria-expanded="false" role="button" tabindex="0"><img aria-label=":${tier}:" src="${image}" alt="${tier}" draggable="false" class="emoji" data-type="emoji"></span>`;
+    const getIcon = (name, image) => {
+        return `<span class="emojiContainer__4a804 emojiContainerClickable__55a4f" aria-expanded="false" role="button" tabindex="0"><img aria-label=":${name}:" src="${image}" alt="${name}" draggable="false" class="emoji" data-type="emoji"></span>`;
     }
 
+    const FloorIcons = [
+        getIcon("bonzo", "https://cdn.discordapp.com/emojis/785196577727709234.webp?size=44&amp;quality=lossless"),
+        getIcon("scarf", "https://cdn.discordapp.com/emojis/785196577467269193.webp?size=44&amp;quality=lossless"),
+        getIcon("theprofessor", "https://cdn.discordapp.com/emojis/785196577559412737.webp?size=44&amp;quality=lossless"),
+        getIcon("thorn", "https://cdn.discordapp.com/emojis/785196577777123384.webp?size=44&amp;quality=lossless"),
+        getIcon("livid", "https://cdn.discordapp.com/emojis/785196578049753108.webp?size=44&amp;quality=lossless"),
+        getIcon("sadan", "https://cdn.discordapp.com/emojis/785196577886175242.webp?size=44&amp;quality=lossless"),
+        getIcon("necron", "https://cdn.discordapp.com/emojis/785196577802682388.webp?size=44&amp;quality=lossless")
+    ]
+
     const KuudraIcons = {
-        basic: getKuudraIcon("basic", "https://wiki.hypixel.net/images/f/f0/SkyBlock_items_kuudra_tier_key.png"),
-        hot: getKuudraIcon("hot", "https://wiki.hypixel.net/images/7/78/SkyBlock_items_kuudra_hot_tier_key.png"),
-        burning: getKuudraIcon("burning", "https://wiki.hypixel.net/images/8/83/SkyBlock_items_kuudra_burning_tier_key.png"),
-        fiery: getKuudraIcon("fiery", "https://wiki.hypixel.net/images/5/51/SkyBlock_items_kuudra_fiery_tier_key.png"),
-        infernal: getKuudraIcon("infernal", "https://wiki.hypixel.net/images/3/3e/SkyBlock_items_kuudra_infernal_tier_key.png")
+        basic: getIcon("basic", "https://wiki.hypixel.net/images/f/f0/SkyBlock_items_kuudra_tier_key.png"),
+        hot: getIcon("hot", "https://wiki.hypixel.net/images/7/78/SkyBlock_items_kuudra_hot_tier_key.png"),
+        burning: getIcon("burning", "https://wiki.hypixel.net/images/8/83/SkyBlock_items_kuudra_burning_tier_key.png"),
+        fiery: getIcon("fiery", "https://wiki.hypixel.net/images/5/51/SkyBlock_items_kuudra_fiery_tier_key.png"),
+        infernal: getIcon("infernal", "https://wiki.hypixel.net/images/3/3e/SkyBlock_items_kuudra_infernal_tier_key.png")
     };
 
     return class extends Plugin {

@@ -24,3 +24,5 @@ A run configuration can be used to automatically build the plugin and load it in
 3. Set the scripts to `build`
 4. Set the arguments to `BetterSBM`
 
+### Command Line
+1. Run `npm run build BetterSBM`

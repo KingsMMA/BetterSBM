@@ -142,56 +142,27 @@ module.exports = !global.ZeresPluginLibrary ? Dummy : (([Plugin, Api]) => {
 
             BdApi.DOM.addStyle("BetterSBM", `.content__764ce.content__96073.thin_b1c063.scrollerBase_dc3aa9 {
                 color: white;
+            }
+            
+            .chatContent__5dca8:has(.messageListItem__6a4fb[id*="875229228625428530"]) .messageListItem__6a4fb:has(.reactions_b8dc93 img[data-name="👍"]),
+            .chatContent__5dca8:has(.messageListItem__6a4fb[id*="1117587573653647390"]) .messageListItem__6a4fb:has(.reactions_b8dc93 img[data-name="👍"]),
+            .chatContent__5dca8:has(.messageListItem__6a4fb[id*="1117587647859265597"]) .messageListItem__6a4fb:has(.reactions_b8dc93 img[data-name="👍"]),
+            .chatContent__5dca8:has(.messageListItem__6a4fb[id*="950669851855302696"]) .messageListItem__6a4fb:has(.reactions_b8dc93 img[data-name="👍"]),
+            .chatContent__5dca8:has(.messageListItem__6a4fb[id*="1117587509493379203"]) .messageListItem__6a4fb:has(.reactions_b8dc93 img[data-name="👍"]) {
+                display:none;
             }`);
 
             window.unpatchTicketViewer = Patcher.after(RenderFields, "renderFields", this.loadEmbed);
 
             const {Webpack: src_Webpack} = BdApi;
             const ConnectedReaction = src_Webpack.getModule(m => m?.type?.toString()?.includes('burstReactionsEnabled'), {searchExports: true});
-            const unpatchConnectedReaction = Patcher.after(ConnectedReaction, 'type', (_, __, reaction) => {
-                unpatchConnectedReaction();
-
-                window.unpatchLogHider = Patcher.after(reaction.type.prototype, 'render', (thisObject, _, result) => {
-                    const {message, emoji, count, type} = thisObject.props;
-                    console.log(message);
-                    if (message.embeds.length !== 1) return;
-                    const embed = message.embeds[0];
-                    const title = embed.rawTitle;
-                    if (title === undefined) {
-                        if (
-                            (embed.footer === undefined || embed.footer.text !== "Skyblock Maniacs") ||
-                            (embed.author === undefined) ||
-                            (embed.fields.length !== 4 || embed.fields[0].rawName !== "Ticket Owner" || embed.fields[1].rawName !== "Ticket Name" ||
-                                embed.fields[2].rawName !== "Panel Name" || embed.fields[3].rawName !== "Direct Transcript")
-                        )
-                            return;
-                    } else {
-                        const parts = title.split(" ");
-                        if (parts.length !== 3 || parts[1] !== "Service" || parts[2] !== "Log") return;
-                    }
-
-                    if (message.reactions !== undefined && message.reactions.length >= 1) {
-                        for (const reaction of message.reactions) {
-                            if (reaction.emoji.name === "👍") {
-                                message.blocked = true;
-                            }
-                        }
-                    }
-                });
-            });
 
             Logger.info("Plugin enabled!");
         }
 
         onStop() {
-            window.unpatchTicketViewer();
-            if (window.unpatchLogHider !== undefined) {
-                window.unpatchLogHider();
-                delete window.unpatchLogHider;
-            }
-
             BdApi.DOM.removeStyle("BetterSBM");
-
+            window.unpatchTicketViewer();
             Logger.info("Plugin disabled!");
         }
 
